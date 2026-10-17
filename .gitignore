@@ -1,0 +1,14 @@
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+node_modules/
+package-lock.json
+*.local
+.env
+test-results/
+*.webm
+*.wav
+*.png.tmp
+*.zip
