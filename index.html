@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Générique Atelier — génériques de fin et cartons-titres / end credits &amp; title cards</title>
+  <meta name="description" content="Générateur gratuit de génériques de fin et de cartons-titres pour vidéastes : défilement vertical, perspective, cartons successifs, carton fixe ; export vidéo WebM, PNG et JSON, 100 % dans le navigateur. FR / EN / Taqbaylit.">
+  <meta name="theme-color" content="#08080b">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2308080b'/%3E%3Cg fill='%23f2d48a'%3E%3Crect x='9' y='7' width='14' height='2.4' rx='1.2'/%3E%3Crect x='6' y='12.5' width='9' height='2' rx='1'/%3E%3Crect x='17' y='12.5' width='9' height='2' rx='1'/%3E%3Crect x='6' y='17.5' width='9' height='2' rx='1' opacity='.7'/%3E%3Crect x='17' y='17.5' width='9' height='2' rx='1' opacity='.7'/%3E%3Crect x='6' y='22.5' width='9' height='2' rx='1' opacity='.4'/%3E%3Crect x='17' y='22.5' width='9' height='2' rx='1' opacity='.4'/%3E%3C/g%3E%3C/svg%3E">
+  <!-- Free OFL fonts (Google Fonts). Only the files actually used are downloaded. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&amp;family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&amp;family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&amp;family=Noto+Kufi+Arabic:wght@400;600;700&amp;family=Noto+Naskh+Arabic:wght@400;600;700&amp;family=Noto+Sans+Tifinagh&amp;family=Oswald:wght@400;600;700&amp;display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#editor" data-i18n="skip">Aller à l’éditeur</a>
+
+  <header class="top">
+    <div class="brand">
+      <!-- Original logo: rows of credits fading upward inside a rounded frame -->
+      <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+        <rect x="1" y="1" width="46" height="46" rx="11" fill="#111117" stroke="#2a2a33"/>
+        <defs><linearGradient id="lg" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#f2d48a"/><stop offset="1" stop-color="#e2735a"/></linearGradient></defs>
+        <g fill="url(#lg)">
+          <rect x="14" y="9" width="20" height="3.4" rx="1.7"/>
+          <rect x="8" y="17" width="13" height="2.6" rx="1.3"/><rect x="27" y="17" width="13" height="2.6" rx="1.3"/>
+          <rect x="8" y="24" width="13" height="2.6" rx="1.3" opacity=".75"/><rect x="27" y="24" width="13" height="2.6" rx="1.3" opacity=".75"/>
+          <rect x="8" y="31" width="13" height="2.6" rx="1.3" opacity=".5"/><rect x="27" y="31" width="13" height="2.6" rx="1.3" opacity=".5"/>
+          <rect x="8" y="38" width="13" height="2.6" rx="1.3" opacity=".25"/><rect x="27" y="38" width="13" height="2.6" rx="1.3" opacity=".25"/>
+        </g>
+      </svg>
+      <div>
+        <h1 data-i18n="appTitle">Générique Atelier</h1>
+        <p class="tagline" data-i18n="tagline">Génériques de fin et cartons-titres pour vos films — dans le navigateur</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <label class="lang"><span data-i18n="language">Langue</span>
+        <select id="lang"></select>
+      </label>
+      <button id="helpBtn" class="btn ghost" type="button" aria-haspopup="dialog"><span aria-hidden="true">?</span> <span data-i18n="help">Aide</span></button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ============================== Left: credits editor -->
+    <section class="col col-left" id="editor" tabindex="-1" aria-labelledby="hCredits">
+      <h2 class="sr-only" id="hCredits" data-i18n="hCredits">Crédits</h2>
+
+      <section class="panel" aria-labelledby="hTitleCard">
+        <div class="panel-head">
+          <h2 id="hTitleCard" data-i18n="hTitleCard">Carton-titre</h2>
+          <label class="check"><input type="checkbox" data-k="title.show"> <span data-i18n="show">Afficher</span></label>
+        </div>
+        <label class="field"><span data-i18n="lblTitle">Titre</span><input type="text" dir="auto" maxlength="300" data-k="title.title" id="fTitle"></label>
+        <label class="field"><span data-i18n="lblSubtitle">Sous-titre</span><input type="text" dir="auto" maxlength="300" data-k="title.subtitle"></label>
+      </section>
+
+      <section class="panel" aria-labelledby="hSections">
+        <div class="panel-head">
+          <h2 id="hSections" data-i18n="hSections">Sections</h2>
+          <span id="secCount" class="badge"></span>
+        </div>
+        <div id="sections" class="sections"></div>
+        <p id="noSections" class="muted small" data-i18n="noSections" hidden></p>
+        <button id="addSection" class="btn wide" type="button"><span aria-hidden="true">＋</span> <span data-i18n="addSection">Ajouter une section</span></button>
+      </section>
+
+      <section class="panel" aria-labelledby="hClosing">
+        <div class="panel-head">
+          <h2 id="hClosing" data-i18n="hClosing">Carton final</h2>
+          <label class="check"><input type="checkbox" data-k="closing.show"> <span data-i18n="show">Afficher</span></label>
+        </div>
+        <label class="field"><span data-i18n="closingText">Texte final</span><input type="text" dir="auto" maxlength="300" data-k="closing.text"></label>
+        <label class="field"><span data-i18n="thanks">Remerciements</span><textarea rows="2" dir="auto" maxlength="600" data-k="closing.thanks"></textarea></label>
+        <div class="row logo-row">
+          <label class="btn ghost file"><input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"><span aria-hidden="true">🖼</span> <span data-i18n="logo">Logo (image locale)</span></label>
+          <img id="logoThumb" class="logo-thumb" alt="" hidden>
+          <button id="logoRemove" class="btn ghost small" type="button" data-i18n="removeLogo" hidden>Retirer le logo</button>
+        </div>
+      </section>
+
+      <details class="panel bulk" id="bulkPanel">
+        <summary><h2 data-i18n="hBulk">Coller du texte</h2></summary>
+        <p class="muted small" data-i18n="bulkHelp"></p>
+        <textarea id="bulkText" rows="9" dir="auto" spellcheck="false" data-i18n-aria="bulkAria" placeholder="# Image&#10;Directrice de la photographie : Nadia Ferhat&#10;Cadre : Massinissa Ouali&#10;&#10;# Son&#10;Mixage : Kahina Saadi"></textarea>
+        <div class="row">
+          <button id="bulkReplace" class="btn accent" type="button" data-i18n="bulkReplace">Remplacer les sections</button>
+          <button id="bulkAppend" class="btn" type="button" data-i18n="bulkAppend">Ajouter à la suite</button>
+          <button id="bulkLoad" class="btn ghost" type="button" data-i18n="bulkLoad">Charger le texte actuel</button>
+        </div>
+      </details>
+    </section>
+
+    <!-- ============================== Centre: preview + transport -->
+    <section class="col col-center" aria-labelledby="hPreview">
+      <div class="panel stage">
+        <h2 id="hPreview" data-i18n="hPreview">Aperçu</h2>
+        <div class="screen" id="screen">
+          <canvas id="preview" role="img" data-i18n-aria="previewAria"></canvas>
+        </div>
+        <div class="transport">
+          <button id="playBtn" class="play" type="button" aria-pressed="false">
+            <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>
+            <svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.2" height="14" rx="1"/><rect x="13.8" y="5" width="4.2" height="14" rx="1"/></svg>
+            <span class="play-label" data-i18n="play">Lecture</span>
+          </button>
+          <button id="restartBtn" class="btn" type="button"><span aria-hidden="true">⏮</span> <span data-i18n="restart">Début</span></button>
+          <span id="time" class="time" aria-live="off">00:00.0 / 00:00.0</span>
+          <label class="check"><input id="loop" type="checkbox"> <span data-i18n="loop">Boucle</span></label>
+        </div>
+        <input id="scrub" class="scrub" type="range" min="0" max="1000" step="1" value="0" data-i18n-aria="position">
+        <p id="info" class="info"></p>
+      </div>
+    </section>
+
+    <!-- ============================== Right: look, timing, export -->
+    <aside class="col col-right">
+      <section class="panel" aria-labelledby="hLook">
+        <h2 id="hLook" data-i18n="hLook">Mode et mise en page</h2>
+        <div id="modes" class="seg" role="radiogroup" data-i18n-aria="mode">
+          <label><input type="radio" name="mode" value="roll" data-k="style.mode"><span data-i18n="modeRoll">Défilement vertical</span></label>
+          <label><input type="radio" name="mode" value="crawl" data-k="style.mode"><span data-i18n="modeCrawl">Perspective (fuite)</span></label>
+          <label><input type="radio" name="mode" value="cards" data-k="style.mode"><span data-i18n="modeCards">Cartons successifs</span></label>
+          <label><input type="radio" name="mode" value="still" data-k="style.mode"><span data-i18n="modeStill">Carton fixe</span></label>
+        </div>
+        <div class="grid2">
+          <label class="field span2"><span data-i18n="layout">Disposition</span>
+            <select data-k="style.layout"><option value="two" data-i18n="layTwo"></option><option value="stack" data-i18n="layStack"></option><option value="names" data-i18n="layNames"></option></select></label>
+          <label class="field span2"><span data-i18n="theme">Thème</span><select id="theme"></select></label>
+          <label class="field"><span data-i18n="titleFont">Police des titres</span><select data-k="style.titleFont" class="font-select"></select></label>
+          <label class="field"><span data-i18n="bodyFont">Police des crédits</span><select data-k="style.font" class="font-select"></select></label>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="hTiming">
+        <h2 id="hTiming" data-i18n="hTiming">Durée et vitesse</h2>
+        <div class="seg two" role="radiogroup" data-i18n-aria="hTiming">
+          <label><input type="radio" name="by" value="duration" data-k="timing.by"><span data-i18n="byDuration">Durée imposée</span></label>
+          <label><input type="radio" name="by" value="speed" data-k="timing.by"><span data-i18n="bySpeed">Vitesse imposée</span></label>
+        </div>
+        <div class="grid2">
+          <label class="field"><span data-i18n="duration">Durée (s)</span><input type="number" min="3" max="1800" step="0.5" inputmode="decimal" data-k="timing.duration" id="fDuration"></label>
+          <label class="field"><span data-i18n="speed">Vitesse (px/s)</span><input type="number" min="10" max="1500" step="1" inputmode="decimal" data-k="timing.speed" id="fSpeed"></label>
+          <label class="field"><span data-i18n="hold">Maintien final (s)</span><input type="number" min="0" max="60" step="0.5" inputmode="decimal" data-k="timing.hold"></label>
+          <label class="field"><span data-i18n="fade">Fondus (s)</span><input type="number" min="0" max="5" step="0.1" inputmode="decimal" data-k="timing.fade"></label>
+          <label class="check span2"><input type="checkbox" data-k="timing.stopOnEnd"> <span data-i18n="stopOnEnd">S’arrêter sur le carton final</span></label>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="hColors">
+        <h2 id="hColors" data-i18n="hColors">Fond et couleurs</h2>
+        <div class="grid2">
+          <label class="field span2"><span data-i18n="bgType">Fond</span>
+            <select data-k="style.bgType"><option value="solid" data-i18n="bgSolid"></option><option value="linear" data-i18n="bgLinear"></option><option value="radial" data-i18n="bgRadial"></option><option value="transparent" data-i18n="bgTransparent"></option></select></label>
+          <label class="field color"><span data-i18n="bg1">Couleur 1</span><input type="color" data-k="style.bg1"></label>
+          <label class="field color"><span data-i18n="bg2">Couleur 2</span><input type="color" data-k="style.bg2"></label>
+          <div class="slider span2"><label for="sAngle" data-i18n="bgAngle">Angle</label><output for="sAngle"></output><input id="sAngle" type="range" min="0" max="360" step="5" data-k="style.bgAngle" data-unit="°"></div>
+          <label class="field color"><span data-i18n="colTitle">Titres</span><input type="color" data-k="style.colTitle"></label>
+          <label class="field color"><span data-i18n="colSection">Sections</span><input type="color" data-k="style.colSection"></label>
+          <label class="field color"><span data-i18n="colRole">Rôles</span><input type="color" data-k="style.colRole"></label>
+          <label class="field color"><span data-i18n="colName">Noms</span><input type="color" data-k="style.colName"></label>
+          <div class="slider"><label for="sGrain" data-i18n="grain">Grain</label><output for="sGrain"></output><input id="sGrain" type="range" min="0" max="1" step="0.05" data-k="style.grain" data-pct="1"></div>
+          <div class="slider"><label for="sVig" data-i18n="vignette">Vignettage</label><output for="sVig"></output><input id="sVig" type="range" min="0" max="1" step="0.05" data-k="style.vignette" data-pct="1"></div>
+          <label class="check"><input type="checkbox" data-k="style.shadow"> <span data-i18n="shadow">Ombre portée</span></label>
+          <label class="check"><input type="checkbox" id="checker" checked> <span data-i18n="checker">Damier</span></label>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="hType">
+        <h2 id="hType" data-i18n="hType">Typographie</h2>
+        <div class="sliders">
+          <div class="slider"><label for="sT" data-i18n="sizeTitle"></label><output for="sT"></output><input id="sT" type="range" min="24" max="240" step="1" data-k="style.sizeTitle" data-unit=" px"></div>
+          <div class="slider"><label for="sS" data-i18n="sizeSection"></label><output for="sS"></output><input id="sS" type="range" min="12" max="120" step="1" data-k="style.sizeSection" data-unit=" px"></div>
+          <div class="slider"><label for="sR" data-i18n="sizeRole"></label><output for="sR"></output><input id="sR" type="range" min="12" max="120" step="1" data-k="style.sizeRole" data-unit=" px"></div>
+          <div class="slider"><label for="sN" data-i18n="sizeName"></label><output for="sN"></output><input id="sN" type="range" min="12" max="160" step="1" data-k="style.sizeName" data-unit=" px"></div>
+          <div class="slider"><label for="sL" data-i18n="lineGap"></label><output for="sL"></output><input id="sL" type="range" min="0.9" max="3" step="0.05" data-k="style.lineGap" data-unit="×"></div>
+          <div class="slider"><label for="sG" data-i18n="sectionGap"></label><output for="sG"></output><input id="sG" type="range" min="0" max="400" step="5" data-k="style.sectionGap" data-unit=" px"></div>
+          <div class="slider"><label for="sU" data-i18n="gutter"></label><output for="sU"></output><input id="sU" type="range" min="0" max="300" step="2" data-k="style.gutter" data-unit=" px"></div>
+          <div class="slider"><label for="sW" data-i18n="width"></label><output for="sW"></output><input id="sW" type="range" min="0.4" max="1" step="0.01" data-k="style.width" data-pct="1"></div>
+        </div>
+        <div class="toggles">
+          <label class="check"><input type="checkbox" data-k="style.upperSections"> <span data-i18n="upperSections">Sections en capitales</span></label>
+          <label class="check"><input type="checkbox" data-k="style.upperRoles"> <span data-i18n="upperRoles">Rôles en capitales</span></label>
+        </div>
+        <p class="muted small" data-i18n="unitsNote"></p>
+      </section>
+
+      <section class="panel" aria-labelledby="hExport">
+        <h2 id="hExport" data-i18n="hExport">Export</h2>
+        <div class="grid3">
+          <label class="field"><span data-i18n="resolution">Format</span><select data-k="output.res" id="fRes"></select></label>
+          <label class="field"><span data-i18n="fps">Images/s</span><select data-k="output.fps"><option>24</option><option>25</option><option>30</option><option>60</option></select></label>
+          <label class="field"><span data-i18n="bitrate">Débit</span><select data-k="output.bitrate"><option value="6">6 Mb/s</option><option value="12">12 Mb/s</option><option value="25">25 Mb/s</option><option value="50">50 Mb/s</option></select></label>
+        </div>
+        <button id="webmBtn" class="btn accent wide" type="button"><span aria-hidden="true">●</span> <span data-i18n="exportWebm">Exporter la vidéo (WebM)</span></button>
+        <div id="recBox" class="rec" hidden>
+          <progress id="recProg" max="1" value="0"></progress>
+          <span id="recLabel" class="small" data-i18n="recording">Enregistrement…</span>
+          <button id="recCancel" class="btn ghost small" type="button" data-i18n="cancel">Annuler</button>
+        </div>
+        <p class="muted small" data-i18n="webmNote"></p>
+        <div class="btn-grid">
+          <button id="pngBtn" class="btn" type="button" data-i18n="exportFrame">PNG de l’image actuelle</button>
+          <button id="sheetBtn" class="btn" type="button" data-i18n="exportSheet">PNG du générique complet</button>
+          <button id="jsonBtn" class="btn" type="button" data-i18n="saveJson">Enregistrer le projet (JSON)</button>
+          <label class="btn file"><input id="jsonFile" type="file" accept="application/json,.json"><span data-i18n="loadJson">Ouvrir un projet</span></label>
+          <button id="copyBtn" class="btn" type="button" data-i18n="copyText">Copier en texte</button>
+          <button id="resetBtn" class="btn ghost" type="button" data-i18n="newProject">Nouveau projet (exemple)</button>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="foot">
+    <p><span data-i18n="footer">Logiciel libre (MIT) · Tout est calculé dans votre navigateur, rien n’est envoyé.</span>
+      · <a href="https://github.com/salimadour31-boop/generique-atelier" data-i18n="source">Code source</a></p>
+  </footer>
+
+  <dialog id="help" aria-labelledby="helpTitle">
+    <div class="dlg">
+      <h2 id="helpTitle" data-i18n="help">Aide</h2>
+      <p data-i18n="helpIntro"></p>
+      <p data-i18n="helpRtl"></p>
+      <h3 data-i18n="shortcuts">Raccourcis clavier</h3>
+      <table class="keys">
+        <tr><td><kbd data-i18n="kbdSpace">Espace</kbd></td><td data-i18n="kSpace"></td></tr>
+        <tr><td><kbd>Home</kbd></td><td data-i18n="kHome"></td></tr>
+        <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td data-i18n="kArrows"></td></tr>
+        <tr><td><kbd>?</kbd></td><td data-i18n="kHelp"></td></tr>
+        <tr><td><kbd data-i18n="kbdEsc">Échap</kbd></td><td data-i18n="kEsc"></td></tr>
+      </table>
+      <form method="dialog"><button class="btn accent" data-i18n="close">Fermer</button></form>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/core.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
